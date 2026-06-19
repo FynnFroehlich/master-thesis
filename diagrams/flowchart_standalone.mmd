@@ -1,0 +1,72 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e3f2fd', 'primaryTextColor': '#1565c0', 'primaryBorderColor': '#1976d2', 'lineColor': '#1976d2', 'secondaryColor': '#fff8e1', 'tertiaryColor': '#fce4ec'}}}%%
+flowchart TB
+    subgraph DataLayer["📁 Data Layer"]
+        direction LR
+        RAW["Raw Data<br/>• Wind (Renewables.ninja)<br/>• PV (Renewables.ninja)<br/>• Prices (SMARD)"]
+        DIO["data_io.py"]
+        PRE["preprocess.py"]
+        CLEAN["Cleaned Dataset<br/>(8760 hours)"]
+        RAW --> DIO --> PRE --> CLEAN
+    end
+
+    subgraph ConfigLayer["⚙️ Configuration"]
+        direction LR
+        CFG["config.py<br/>• CAPEX/OPEX<br/>• WACC<br/>• Lifetimes<br/>• POI Capacity"]
+        SCN["scenarios.py<br/>• Scenario definitions<br/>• Technology mix"]
+    end
+
+    subgraph SimLayer["🔄 Simulation Engine"]
+        direction TB
+        SIM["simulation.py<br/>Rule-based dispatch"]
+        LP["simulation_lp.py<br/>LP Optimization<br/>(PuLP solver)"]
+        
+        subgraph LPDetail["LP Model"]
+            OBJ["max Σ export × price"]
+            CON["• Energy balance<br/>• POI constraint<br/>• SOC dynamics<br/>• Green battery"]
+        end
+        
+        LP --> LPDetail
+    end
+
+    subgraph AnalysisLayer["📊 Analysis Modules"]
+        direction TB
+        OVS["oversizing_analysis.py<br/>Stand-alone PV/Wind<br/>α sweep"]
+        HYB["hybrid_analysis.py<br/>PV+Wind co-location<br/>(α_tot, s_wind) grid"]
+        PVB["pv_battery_analysis.py<br/>Greenfield PV+BESS<br/>(α_pv, γ) grid"]
+        BESS["hybrid_bess_analysis.py<br/>PV+Wind+BESS<br/>(α_tot, s_wind, γ) grid"]
+    end
+
+    subgraph EconLayer["💰 Economics"]
+        ECO["economics.py<br/>• NPV calculation<br/>• IRR computation<br/>• LCOE<br/>• Cash flow builders"]
+    end
+
+    subgraph OutputLayer["📈 Output"]
+        RES["Results<br/>• NPV heatmaps<br/>• Optimal configs<br/>• POI utilisation"]
+        NB["Jupyter Notebooks<br/>01-07 Analysis"]
+    end
+
+    CLEAN --> SimLayer
+    CFG --> SimLayer
+    CFG --> EconLayer
+    SCN --> AnalysisLayer
+    
+    SIM --> OVS
+    SIM --> HYB
+    LP --> PVB
+    LP --> BESS
+    
+    OVS --> ECO
+    HYB --> ECO
+    PVB --> ECO
+    BESS --> ECO
+    
+    ECO --> RES
+    AnalysisLayer --> NB
+    NB --> RES
+
+    style DataLayer fill:#e3f2fd,stroke:#1976d2
+    style ConfigLayer fill:#fff8e1,stroke:#ffa000
+    style SimLayer fill:#e8f5e9,stroke:#388e3c
+    style AnalysisLayer fill:#fce4ec,stroke:#c2185b
+    style EconLayer fill:#f3e5f5,stroke:#7b1fa2
+    style OutputLayer fill:#fff3e0,stroke:#e65100

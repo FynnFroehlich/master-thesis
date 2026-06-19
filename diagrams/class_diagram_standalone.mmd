@@ -1,0 +1,120 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e1f5fe', 'primaryTextColor': '#01579b', 'primaryBorderColor': '#0277bd', 'lineColor': '#0277bd', 'secondaryColor': '#fff3e0', 'tertiaryColor': '#f3e5f5'}}}%%
+classDiagram
+    direction TB
+    
+    class Config {
+        <<dataclass>>
+        +poi_capacity_mw: float
+        +timezone: str
+        +analysis_year: int
+        +price_year: int
+        ---PV Parameters---
+        +capex_pv_eur_per_kw: float
+        +opex_pv_eur_per_kw_per_year: float
+        +lifetime_pv_years: int
+        +wacc_pv_real: float
+        +degradation_pv_per_year: float
+        ---Wind Parameters---
+        +capex_wind_eur_per_kw: float
+        +opex_wind_eur_per_kw_per_year: float
+        +lifetime_wind_years: int
+        +wacc_wind_real: float
+    }
+
+    class Scenario {
+        <<dataclass>>
+        +name: str
+        +description: str
+        +wind_capacity_mw: float
+        +pv_capacity_mw: float
+        +battery_power_mw: float
+        +battery_capacity_mwh: float
+        +battery_duration_h() float
+        +has_battery() bool
+        +has_wind() bool
+        +has_pv() bool
+    }
+
+    class OversizingResult {
+        <<dataclass>>
+        +tech: str
+        +alpha: float
+        +capacity_mw: float
+        +npv_eur: float
+        +irr: float
+        +annual_revenue_eur: float
+        +annual_export_mwh: float
+        +annual_curtailment_mwh: float
+        +poi_utilisation_factor: float
+    }
+
+    class HybridResult {
+        <<dataclass>>
+        +alpha_tot: float
+        +s_wind: float
+        +pv_capacity_mw: float
+        +wind_capacity_mw: float
+        +wacc: float
+        +npv_eur: float
+        +irr: float
+        +annual_revenue_eur_total: float
+        +annual_export_mwh_total: float
+        +poi_utilisation_factor: float
+    }
+
+    class HybridBessResult {
+        <<dataclass>>
+        +alpha_tot: float
+        +s_wind: float
+        +gamma: float
+        +pv_capacity_mw: float
+        +wind_capacity_mw: float
+        +bess_power_mw: float
+        +bess_energy_mwh: float
+        +wacc: float
+        +npv_eur: float
+        +irr: float
+        +capex_total_eur: float
+        +annual_revenue_eur: float
+        +battery_cycles: float
+        +poi_utilisation: float
+    }
+
+    class PvBessResult {
+        <<dataclass>>
+        +alpha_pv: float
+        +gamma: float
+        +pv_capacity_mw: float
+        +batt_power_mw: float
+        +batt_energy_mwh: float
+        +wacc: float
+        +npv_eur: float
+        +annual_revenue_eur: float
+        +annual_export_mwh_total: float
+        +poi_utilisation: float
+        +irr: float
+    }
+
+    class PvBessNpvResult {
+        <<dataclass>>
+        +capex_pv_eur: float
+        +capex_bess_eur: float
+        +capex_total_eur: float
+        +annual_revenue_year1_eur: float
+        +annual_opex_total_eur: float
+        +bess_replacement_year: int
+        +npv_eur: float
+        +irr: float
+        +simple_payback_years: float
+        +cash_flows: ndarray
+    }
+
+    Config ..> OversizingResult : configures
+    Config ..> HybridResult : configures
+    Config ..> HybridBessResult : configures
+    Config ..> PvBessResult : configures
+    Scenario --> OversizingResult : evaluates to
+    Scenario --> HybridResult : evaluates to
+    Scenario --> HybridBessResult : evaluates to
+    Scenario --> PvBessResult : evaluates to
+    PvBessResult --> PvBessNpvResult : detailed economics
