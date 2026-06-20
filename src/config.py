@@ -58,7 +58,7 @@ PROJECT_LIFETIME_YEARS = 30  # Project evaluation period
 # EEG Innovationsausschreibung 2024 Parameters
 # =============================================================================
 # Floating Market Premium (FMP) for Innovation Tender 2024
-# Strike price: 5.31 ct/kWh = 0.0531 EUR/kWh
+# Strike price: 8.33 ct/kWh = 0.0833 EUR/kWh (matches the constant below)
 INNOVATION_TENDER_STRIKE_PRICE_EUR_PER_KWH = 0.0833  # EUR/kWh
 INNOVATION_TENDER_STRIKE_PRICE_EUR_PER_MWH = 83.3    # EUR/MWh (for convenience)
 INNOVATION_TENDER_PREMIUM_YEARS = 20  # Market premium duration before merchant regime
@@ -96,8 +96,8 @@ class Config:
     timezone: str = "Europe/Berlin"
     
     # Year for analysis
-    analysis_year: int = 2019  # Generation data year
-    price_year: int = 2023     # Price data year
+    analysis_year: int = 2024  # Generation data year
+    price_year: int = 2024     # Price data year
     
     # PV parameters
     capex_pv_eur_per_kw: float = CAPEX_PV_EUR_PER_KW

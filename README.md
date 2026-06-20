@@ -50,9 +50,9 @@ A time series simulation model for analyzing renewable energy projects with cabl
 ### 1. Prepare Data
 
 Place your raw data files in `data_raw/`:
-- Wind generation data from Renewables.ninja (2019)
-- PV generation data from Renewables.ninja (2019)
-- Day-ahead prices from SMARD (2023, DE-LU bidding zone)
+- Wind generation data from Renewables.ninja (2024)
+- PV generation data from Renewables.ninja (2024)
+- Day-ahead prices from SMARD (2024, DE-LU bidding zone)
 
 ### 2. Preprocess Data
 
@@ -85,17 +85,10 @@ result = simulate_hybrid_year(
 
 ### 4. Economic Evaluation
 
-```python
-from src.economics import evaluate_project
-
-metrics = evaluate_project(
-    sim_df=sim_df,
-    capex_eur=10_000_000.0,
-    opex_eur_per_year=100_000.0,
-    lifetime_years=20,
-    discount_rate=0.05
-)
-```
+NPV / IRR / LCOE for each scenario are produced by the analysis modules
+(`pv_battery_analysis.py`, `hybrid_bess_analysis.py`, `hybrid_analysis.py`,
+`oversizing_analysis.py`) and driven by notebooks 02–07. See
+`notebooks/06_high_level_comparison.ipynb` for the cross-scenario comparison.
 
 ## Scenarios
 

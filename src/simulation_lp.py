@@ -390,7 +390,7 @@ def simulate_pv_bess_lp_innovationsausschreibung(
         timestamps = df.index
     else:
         # Create a default datetime index if not available
-        timestamps = pd.date_range(start='2023-01-01', periods=n_hours, freq='H')
+        timestamps = pd.date_range(start='2024-01-01', periods=n_hours, freq='H')
 
     # Calculate monthly market premium
     # Step 1: Calculate monthly PV market value (weighted average price of PV generation hours)
@@ -674,7 +674,7 @@ def simulate_pv_wind_bess_lp_innovationsausschreibung(
         timestamps = df.index
     else:
         # Create a default datetime index if not available
-        timestamps = pd.date_range(start='2023-01-01', periods=n_hours, freq='H')
+        timestamps = pd.date_range(start='2024-01-01', periods=n_hours, freq='H')
 
     # Calculate monthly market premium
     # Step 1: Calculate monthly hybrid market value (weighted average price of generation hours)
