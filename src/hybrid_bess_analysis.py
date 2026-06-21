@@ -96,6 +96,7 @@ class HybridBessResult:
     # System-oriented metrics
     poi_utilisation: float        # Annual export / (POI * 8760)
     curtailment_rate: float       # Curtailment / Total generation
+    annual_revenue_eur_merchant: float = float("nan")  # yr1 merchant revenue for premium->merchant transition; NaN for non-innovation
 
 
 def build_cash_flows_hybrid_bess(
@@ -873,6 +874,7 @@ def evaluate_hybrid_bess_single_innovationsausschreibung(
         battery_cycles=battery_cycles,
         poi_utilisation=poi_utilisation,
         curtailment_rate=curtailment_rate,
+        annual_revenue_eur_merchant=(annual_revenue_pv_merchant or 0.0) + (annual_revenue_wind_merchant or 0.0),
     )
 
 

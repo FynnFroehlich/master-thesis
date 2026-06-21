@@ -114,6 +114,7 @@ class PvBessResult:
     annual_opex_bess_eur: float = 0.0
     annual_opex_total_eur: float = 0.0
     irr: float = 0.0
+    annual_revenue_eur_merchant: float = float("nan")  # yr1 merchant revenue for premium->merchant transition; NaN for non-innovation
 
 
 def evaluate_pv_bess_grid(
@@ -649,6 +650,7 @@ def evaluate_pv_bess_grid_innovationsausschreibung(
                 annual_opex_bess_eur=annual_opex_bess,
                 annual_opex_total_eur=annual_opex_pv + annual_opex_bess,
                 irr=irr_val,
+                annual_revenue_eur_merchant=annual_revenue_eur_merchant,
             )
             results.append(result)
     
